@@ -50,8 +50,8 @@ Install the following:
 5. Chrome Browser (Latest version)
 
 4. Cloning This Project:
-   git clone https://github.com/<your-username>/<your-repo-name>.git
-   cd <your-repo-name>
+   git clone https://github.com/aiymii/aajil-qa-assessment.git
+   cd <aajil-qa-assessment>
 
 5. Running Tests:
   * Right-click testng.xml on Intellij IDE or any preferred IDE → Run
