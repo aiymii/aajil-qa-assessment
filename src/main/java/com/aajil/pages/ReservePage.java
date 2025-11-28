@@ -1,17 +1,37 @@
 package com.aajil.pages;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+
+import java.util.List;
 
 public class ReservePage extends BasePage {
 
-    private By firstFlightSelectBtn = By.xpath("(//input[@value='Choose This Flight'])[1]");
+    @FindBy(css = "input.btn-small")
+    private List<WebElement> flightButtons;
 
     public ReservePage(WebDriver driver) {
         super(driver);
+        PageFactory.initElements(driver, this);
     }
 
-    public void chooseFirstFlight() {
-        click(firstFlightSelectBtn);
+    public void chooseFlight(int flightSeq) {
+
+        wait.until(ExpectedConditions.visibilityOfAllElements(flightButtons));
+
+        if (flightSeq < 0 || flightSeq >= flightButtons.size()) {
+            throw new IllegalArgumentException(
+                    "Invalid flight index " + flightSeq +
+                            ". Available flights: " + flightButtons.size()
+            );
+        }
+
+        WebElement button = flightButtons.get(flightSeq);
+
+        js.executeScript("arguments[0].scrollIntoView(true);", button);
+        wait.until(ExpectedConditions.elementToBeClickable(button));
+
+        button.click();
     }
 }

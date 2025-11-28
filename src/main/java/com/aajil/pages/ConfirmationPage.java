@@ -1,18 +1,34 @@
 package com.aajil.pages;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.*;
+import org.openqa.selenium.support.ui.*;
 
-public class ConfirmationPage extends BasePage {
+import java.util.List;
 
-    private By statusText = By.cssSelector("table tr:nth-child(1) td:nth-child(2)");
+public class ConfirmationPage {
 
-    public ConfirmationPage(WebDriver driver) {
-        super(driver);
+    private WebDriverWait wait;
+
+    @FindBy(css = "td:nth-child(2)")
+    private List<WebElement> rows;
+
+    public ConfirmationPage(WebDriver driver, WebDriverWait wait) {
+        this.wait = wait;
+        PageFactory.initElements(driver, this);
     }
 
     public String getStatus() {
-        waitForElement(statusText);
-        return driver.findElement(statusText).getText();
+        wait.until(ExpectedConditions.visibilityOfAllElements(rows));
+        return rows.get(1).getText().trim();
+    }
+
+    public double getPrice() {
+        wait.until(ExpectedConditions.visibilityOfAllElements(rows));
+        String raw = rows.get(2).getText().trim(); // Example: "USD 555.00"
+
+        // Extract last numeric value
+        String price = raw.replaceAll("[^0-9.]", "");
+        return Double.parseDouble(price);
     }
 }
